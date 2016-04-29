@@ -135,7 +135,6 @@ public class LinkedList<Element>: CustomStringConvertible {
         firstNode?.previous = nil
     }
 
-    /////CHECKKKK
     /// - Complexity: O(n)
     public func removeElementAtIndex(index: Int) {
         if index < 0 || index >= count { fatalError("Index \(index) out of bounds") }
