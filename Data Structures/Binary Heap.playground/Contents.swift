@@ -1,9 +1,19 @@
 import Foundation
 
 
-public class PriorityQueue<Element: Comparable> {
+public class BinaryHeap<Element: Comparable> {
 
     var array =  [Element]()
+
+    //MARK: - Initialization
+
+    public init() { }
+
+    public init(array: [Element]) {
+        self.array = array
+
+        for i in stride(from: Int(array.count/2), to: -1, by: -1) { sink(i) }
+    }
 
     //MARK: - Public interface
 
@@ -17,8 +27,15 @@ public class PriorityQueue<Element: Comparable> {
     public func deleteMax() -> Element {
         let max = array[0]
         array[0] = array[array.count - 1]
+        array.removeLast()
         sink(0)
         return max
+    }
+
+    public func sort() -> [Element] {
+        var sortedArray = array
+        for i in 0..<sortedArray.count { sortedArray[i] = deleteMax() }
+        return sortedArray
     }
 
     //MARK: - Private methods
@@ -50,15 +67,19 @@ public class PriorityQueue<Element: Comparable> {
             if child0 > array.count - 1 { return }
 
             // Has only one child
-            if child0 == array.count - 1 && indexLess(nodeIndex, child0){
-                indexExchange(nodeIndex, child0)
-                nodeIndex = child0
+            if child0 == array.count - 1 {
+                if indexLess(nodeIndex, child0) {
+                    indexExchange(nodeIndex, child0)
+                    nodeIndex = child0
+                } else {
+                    return
+                }
             }
 
             // Has both childs
             if child1 < array.count {
 
-                // Childs are greater
+                // Childs are smaller
                 if indexLess(child0, nodeIndex) && indexLess(child1, nodeIndex) { return }
 
                 if indexLess(child0, child1) {
@@ -84,7 +105,7 @@ public class PriorityQueue<Element: Comparable> {
 
 }
 
-var pq = PriorityQueue<Int>()
+var pq = BinaryHeap<Int>()
 pq.insert(element: 3)
 pq.insert(element: 1)
 pq.insert(element: 9)
@@ -93,4 +114,7 @@ pq.insert(element: 8)
 pq.insert(element: 2)
 pq.insert(element: 88)
 
-print(pq.array)
+print(pq.sort())
+
+
+print(BinaryHeap(array: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]).sort())
